@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hnjca.wechat.dao.MultiDepartsDao">
+
+    <select id="countByEcode" resultType="int" parameterType="string">
+        select count(*) from multi_departs where e_code = #{eCode,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertMultiDeparts" parameterType="com.hnjca.wechat.pojo.MultiDeparts">
+        insert into multi_departs values (
+          #{departId,jdbcType=VARCHAR},#{insideId,jdbcType=VARCHAR},#{groupId,jdbcType=VARCHAR},
+            #{departName,jdbcType=VARCHAR},#{principal,jdbcType=VARCHAR},#{empPrefix,jdbcType=VARCHAR},#{eCode,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <delete id="deleteByEcode" parameterType="string">
+        delete from multi_departs where e_code = #{eCode,jdbcType=VARCHAR}
+    </delete>
+</mapper>

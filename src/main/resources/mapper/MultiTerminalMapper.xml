@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hnjca.wechat.dao.MultiTreminalDao">
+
+    <select id="countByCondition" resultType="int" parameterType="string">
+        select count(*) from multi_terminal where e_code = #{eCode,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertMultiTerminal" parameterType="com.hnjca.wechat.pojo.MultiTerminal">
+        <selectKey keyProperty="tid" order="BEFORE" keyColumn="t_id" resultType="Integer">
+            select SEQ_MULTI.nextval FROM DUAL
+        </selectKey>
+        insert into multi_terminal
+          (t_id,t_name,t_no,t_type,e_code)
+         values (
+          #{tid},#{tName,jdbcType=VARCHAR},#{tNo,jdbcType=VARCHAR},#{tType,jdbcType=NUMERIC},#{eCode,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <delete id="deleteByEcode" parameterType="string">
+        delete from multi_terminal where e_code = #{eCode,jdbcType=VARCHAR}
+    </delete>
+
+    <!-- 通过设备编号，查询设备名称 -->
+    <select id="selectNameByNo" resultType="string" parameterType="map">
+        select t_name from multi_terminal where e_code = #{eCode,jdbcType=VARCHAR} and t_no = #{tNo,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

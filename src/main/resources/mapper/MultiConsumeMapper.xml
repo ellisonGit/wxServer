@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hnjca.wechat.dao.MultiConsumeDao">
+
+    <insert id="insertMultiConsume" parameterType="com.hnjca.wechat.pojo.MultiConsume">
+        <selectKey keyProperty="cid" order="BEFORE" keyColumn="c_id" resultType="Integer">
+            select SEQ_MULTI.nextval FROM DUAL
+        </selectKey>
+        insert into multi_consume
+        (c_id,money,remain_money,consume_type,create_time,create_ip,pose_sequ,card_sequ,t_no,e_code,job_no,card_no)
+         values (
+          #{cid},#{money,jdbcType=VARCHAR},#{remainMoney,jdbcType=VARCHAR},
+            #{consumeType,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{createIp,jdbcType=VARCHAR},
+            #{poseSequ,jdbcType=VARCHAR},#{cardSequ,jdbcType=VARCHAR},#{tNo,jdbcType=VARCHAR},#{eCode,jdbcType=VARCHAR},
+            #{jobNo,jdbcType=VARCHAR},#{cardNo,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <select id="selectOneByCondition" parameterType="map" resultType="com.hnjca.wechat.pojo.MultiConsume">
+        select * from multi_consume where  pose_sequ = #{posSequ,jdbcType=VARCHAR} and e_code = #{eCode,jdbcType=VARCHAR}
+    </select>
+</mapper>

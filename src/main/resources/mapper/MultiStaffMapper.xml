@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hnjca.wechat.dao.MultiStaffDao">
+
+    <select id="countByEcode" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(*) from multi_staff where e_code = #{eCode,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertMultiStaff" parameterType="com.hnjca.wechat.pojo.MultiStaff">
+        <selectKey keyProperty="sid" order="BEFORE" keyColumn="s_id" resultType="Integer">
+            select SEQ_MULTI.nextval FROM DUAL
+        </selectKey>
+        insert into multi_staff
+          (s_id,s_name,e_code,departs_id,job_no,card_no,create_time,last_time)
+        values
+          (#{sid},#{sName,jdbcType=VARCHAR},#{eCode,jdbcType=VARCHAR},#{departsId,jdbcType=VARCHAR},#{jobNo,jdbcType=VARCHAR},
+          #{cardNo,jdbcType=VARCHAR},sysdate,sysdate)
+    </insert>
+
+    <delete id="deleteByEcode" parameterType="java.util.Map">
+        delete from multi_staff where e_code = #{eCode,jdbcType=VARCHAR}
+    </delete>
+
+    <select id="selectByCondition" resultType="com.hnjca.wechat.pojo.MultiStaff" parameterType="java.util.Map">
+      select * from multi_staff where e_code = #{eCode,jdbcType=VARCHAR} and job_no = #{jobNo,jdbcType=VARCHAR}
+    </select>
+</mapper>
