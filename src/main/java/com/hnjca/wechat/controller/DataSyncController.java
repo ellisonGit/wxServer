@@ -168,6 +168,7 @@ public class DataSyncController {
             return new ResponseInfo(InfoEnum.NO_CARDNO,-1);
         }
 
+
         MultiStaff multiStaff = new MultiStaff();
         multiStaff.setSName(sName);
         multiStaff.setDepartsId(departsId);

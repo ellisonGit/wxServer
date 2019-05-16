@@ -21,4 +21,15 @@ public interface MultiStaffDao {
     void deleteByEcode(Map<String,Object> map);
 
     MultiStaff selectByCondition(Map<String,Object> map);
+
+    int selectOpenid(MultiStaff multiStaff);
+
+    int updateOpenid(MultiStaff multiStaff);
+
+    int selectUser(MultiStaff multiStaff);
+
+    String findOpenId(String openId);
+
+    MultiStaff selectUserInfo(String openId);
+
 }

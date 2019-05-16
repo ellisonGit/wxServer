@@ -11,7 +11,8 @@ public enum InfoEnum {
 
     //Enum采用大写加下划线组合
     SUCCESS("000001","SUCCESS"),
-
+    WXSUCCESS("000002","绑定openId,SUCCESS"),
+    OPENID_SUCCESS("000002","该员工已绑定过openId,SUCCESS"),
     NO_OPENID("100001","参数 openid 不能为空"),
     NO_STUNAME("100002","参数 stuName 不能为空"),
     NO_ACTION("100003","参数 action 不能为空"),
@@ -34,6 +35,8 @@ public enum InfoEnum {
     NO_DEPARTSID("400003","部门编号不能为空!"),
     NO_JOBNO("400004","工号不能为空!"),
     NO_CARDNO("400005","卡号不能为空!"),
+    NO_OPEN("400006","openId不存在!"),
+    NO_USER("400007","员工不存在!"),
     ;
 
 

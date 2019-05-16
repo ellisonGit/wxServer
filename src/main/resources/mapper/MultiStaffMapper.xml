@@ -25,4 +25,39 @@
     <select id="selectByCondition" resultType="com.hnjca.wechat.pojo.MultiStaff" parameterType="java.util.Map">
       select * from multi_staff where e_code = #{eCode,jdbcType=VARCHAR} and job_no = #{jobNo,jdbcType=VARCHAR}
     </select>
+
+    <!--根据工号和姓名查是否绑定微信公众号 参数openid -->
+    <select id="selectOpenid" resultType="java.lang.Integer" parameterType="java.util.Map">
+      select count(openid) from multi_staff where s_name = #{sName,jdbcType=VARCHAR} and job_no = #{jobNo,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据工号和姓名查是否存在该员工信息 -->
+    <select id="selectUser" resultType="java.lang.Integer" parameterType="java.util.Map">
+      select job_no from multi_staff where s_name = #{sName,jdbcType=VARCHAR} and job_no = #{jobNo,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据openId查是否存在 -->
+    <select id="findOpenId" resultType="java.lang.String" parameterType="String">
+      select openid from multi_staff where  openid = #{openId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据openId查员工基本信息 -->
+    <select id="selectUserInfo" resultType="com.hnjca.wechat.pojo.MultiStaff"  parameterType="String">
+      select s_name,job_no from multi_staff where  openid = #{openId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据工号和姓名 绑定openid -->
+    <update id="updateOpenid"  parameterType="com.hnjca.wechat.dao.MultiStaffDao" >
+        update multi_staff
+        <set >
+            <if test="openId != null" >
+                openid = #{openId,jdbcType=VARCHAR},
+            </if>
+
+        </set>
+        where 1=1
+        <if test="jobNo != null and jobNo != ''">
+            and job_no  = #{jobNo}
+        </if>
+    </update>
 </mapper>

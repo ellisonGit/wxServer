@@ -51,6 +51,47 @@ public class MultiStaffServiceImpl implements MultiStaffService {
             return -1;
         }
     }
+//根据工号和姓名查询openid
+    @Override
+    public int selectOpenid(MultiStaff multiStaff) {
+        try{
+            return multiStaffDao.selectOpenid(multiStaff);
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return -1;
+        }
+    }
+
+    //根据工号和姓名查询是否存在该员工信息
+    @Override
+    public int selectUser(MultiStaff multiStaff) {
+        try{
+            return multiStaffDao.selectUser(multiStaff);
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return -1;
+        }
+    }
+
+    //根据工号和姓名绑定openid
+    @Override
+    public int updateOpenid(MultiStaff multiStaff) {
+            return multiStaffDao.updateOpenid( multiStaff);
+    }
+
+    //根据openid查是否存在
+    @Override
+    public String findOpenId(String openId) {
+        return multiStaffDao.findOpenId( openId);
+    }
+
+    //根据openid查是否存在
+    @Override
+    public MultiStaff selectUserInfo(String openId) {
+        return multiStaffDao.selectUserInfo( openId);
+    }
 
 
 }

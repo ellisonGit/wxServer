@@ -104,6 +104,15 @@
             <systemPath>${project.basedir}/src/main/resources/lib/ojdbc14.jar</systemPath>
         </dependency>
 
+        <!-- mybatis 分頁面工具 -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+
+
+
     </dependencies>
 
     <build>

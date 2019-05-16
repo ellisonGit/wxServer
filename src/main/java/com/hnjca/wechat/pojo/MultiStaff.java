@@ -26,6 +26,7 @@ public class MultiStaff {
 
     private String telNo ;
 
+    //标记（0：未同步，1已同步）
     private String avatar ;
 
     private Date createTime ;

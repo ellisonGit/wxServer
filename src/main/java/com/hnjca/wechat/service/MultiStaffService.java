@@ -16,4 +16,14 @@ public interface MultiStaffService {
     int countByEcode(String eCode);
 
     int deleteByEcode(String eCode);
+
+    int selectOpenid(MultiStaff multiStaff);
+
+    int updateOpenid(MultiStaff multiStaff);
+
+    int selectUser(MultiStaff multiStaff);
+
+    String findOpenId(String openId);
+
+    MultiStaff selectUserInfo(String openId);
 }
