@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hnjca.wechat.dao.MultiRechargeDao">
+
+    <insert id="insertMultiRecharge" parameterType="com.hnjca.wechat.pojo.MultiRecharge">
+        <selectKey keyProperty="cid" order="BEFORE" keyColumn="c_id" resultType="Integer">
+            select SEQ_MULTI.nextval FROM DUAL
+        </selectKey>
+        insert into multi_recharge
+        (c_id,emp_id,card_id,charge_money,card_balance,card_times,card_sequ,kind,op_ymd,op_user,op_date,remark,difine_sequ,e_code)
+         values (
+            #{cid}, #{empId},#{cardId,jdbcType=VARCHAR},#{chargeMoney,jdbcType=VARCHAR},
+            #{cardBalance,jdbcType=VARCHAR},#{cardTimes,jdbcType=VARCHAR},#{cardSequ,jdbcType=VARCHAR},
+            #{Kind,jdbcType=VARCHAR},#{opYmd,jdbcType=TIMESTAMP},#{opUser,jdbcType=VARCHAR},#{opDate,jdbcType=TIMESTAMP},
+            #{remark,jdbcType=VARCHAR},#{difineSequ,jdbcType=VARCHAR},#{eCode,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <select id="selectOneByCondition" parameterType="map" resultType="com.hnjca.wechat.pojo.MultiRecharge">
+        select * from multi_recharge where  pose_sequ = #{posSequ,jdbcType=VARCHAR} and e_code = #{eCode,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 充值记录-->
+    <select id="selectCList" resultType="com.hnjca.wechat.pojo.MultiRecharge" parameterType="map">
+ SELECT
+	r.charge_money AS chargeMoney,
+	TO_CHAR (
+		r.OP_DATE,
+		'yyyy-MM-dd HH24:mi:ss'
+	) AS opDate
+FROM
+	MULTI_RECHARGE r
+LEFT JOIN MULTI_STAFF s ON s.job_no = r.emp_id
+WHERE
+	r.emp_id= #{0,jdbcType=VARCHAR}
+AND s.openid = #{1,jdbcType=VARCHAR}
+and to_char(r.OP_DATE,'yyyy-MM-dd hh24:mi:ss') LIKE '%'||#{2}||'%'  ORDER BY opDate DESC
+    </select>
+</mapper>

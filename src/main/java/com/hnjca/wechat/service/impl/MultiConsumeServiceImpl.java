@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,7 +63,7 @@ public class MultiConsumeServiceImpl implements MultiConsumeService {
                 TemplateJson templateJson = new TemplateJson();
                 templateJson.setTouser(openId);
                 templateJson.setTemplate_id("usuiSNnSjbVXr3eqcCYC81G0bXMSYG587gE1Ri6gv5U");
-                templateJson.setUrl("http://www.130xxxx5088.com/test/info_1.html?t=2");
+                templateJson.setUrl("http://llison.viphk.ngrok.org/api/info_1.html?t=2");
                 templateJson.setDataFirstValue("您好，"+multiStaff.getSName()+"的校园卡刚进行了一笔消费");
                 templateJson.setDataKeyWord1Value(String.valueOf(multiConsume.getMoney()));
 
@@ -93,4 +94,20 @@ public class MultiConsumeServiceImpl implements MultiConsumeService {
     public MultiConsume selectOneByCondition(Map<String, Object> map) {
         return this.multiConsumeDao.selectOneByCondition(map);
     }
+
+    @Override
+    public String selectYuE(String jobNo,String openId) {
+        return this.multiConsumeDao.selectYuE(jobNo,openId);
+    }
+
+    @Override
+    public MultiConsume selectSum(String jobNo,String openId ,String month) {
+        return this.multiConsumeDao.selectSum(jobNo,openId,month);
+    }
+
+    @Override
+    public List<MultiConsume> selectXList(String jobNo, String openId,String month) {
+        return this.multiConsumeDao.selectXList(jobNo,openId,month);
+    }
+
 }

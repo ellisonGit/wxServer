@@ -35,7 +35,7 @@ public enum InfoEnum {
     NO_DEPARTSID("400003","部门编号不能为空!"),
     NO_JOBNO("400004","工号不能为空!"),
     NO_CARDNO("400005","卡号不能为空!"),
-    NO_OPEN("400006","openId不存在!"),
+    NO_OPEN("100001","openId不存在!"),
     NO_USER("400007","员工不存在!"),
     ;
 

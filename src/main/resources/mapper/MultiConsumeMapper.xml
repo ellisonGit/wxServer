@@ -20,4 +20,69 @@
     <select id="selectOneByCondition" parameterType="map" resultType="com.hnjca.wechat.pojo.MultiConsume">
         select * from multi_consume where  pose_sequ = #{posSequ,jdbcType=VARCHAR} and e_code = #{eCode,jdbcType=VARCHAR}
     </select>
+
+    <!-- 工号和openid查询余额-->
+    <select id="selectYuE" resultType="java.lang.String" parameterType="map">
+       SELECT
+	c.REMAIN_MONEY as remainMoney
+FROM
+	MULTI_CONSUME c
+LEFT JOIN MULTI_STAFF s on c.job_no=s.job_no
+WHERE
+	c.CREATE_TIME = (
+		SELECT
+			MAX (CREATE_TIME)
+		FROM
+			MULTI_CONSUME
+		WHERE
+			JOB_NO = #{0,jdbcType=VARCHAR}
+	) and s.openid=#{1,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectSum" resultType="com.hnjca.wechat.pojo.MultiConsume" parameterType="map">
+       SELECT
+	r.cmoney as remainMoney,
+	SUM (c.MONEY) as money,
+	c.job_no
+FROM
+	MULTI_CONSUME c
+LEFT JOIN (
+	SELECT
+		emp_id,
+		SUM (charge_money) AS cmoney
+	FROM
+		MULTI_RECHARGE
+	WHERE
+		emp_id = #{0,jdbcType=VARCHAR}
+	GROUP BY
+		emp_id
+) r ON r.emp_id = c.JOB_NO
+LEFT JOIN MULTI_STAFF s ON s.job_no = c.job_no
+WHERE
+	c.job_no = #{0,jdbcType=VARCHAR}
+AND s.openid =#{1,jdbcType=VARCHAR}
+and to_char(c.create_time,'yyyy-MM-dd hh24:mi:ss') LIKE '%'||#{2}||'%'
+GROUP BY
+	c.job_no,
+	R.CMONEY
+    </select>
+
+	<!-- 消费记录-->
+    <select id="selectXList" resultType="com.hnjca.wechat.pojo.MultiConsume" parameterType="map">
+ SELECT
+	c.money AS money,
+	TO_CHAR (
+		c.create_time,
+		'yyyy-MM-dd HH24:mi:ss'
+	) AS createTime
+FROM
+	MULTI_CONSUME c
+LEFT JOIN MULTI_STAFF s ON s.job_no = c.job_no
+WHERE
+	c.job_no = #{0,jdbcType=VARCHAR}
+AND s.openid = #{1,jdbcType=VARCHAR}
+and to_char(c.create_time,'yyyy-MM-dd hh24:mi:ss') LIKE '%'||#{2}||'%'  ORDER BY createTime DESC
+    </select>
+
+
 </mapper>

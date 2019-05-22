@@ -1,14 +1,8 @@
 package com.hnjca.wechat.controller;
 
 import com.hnjca.wechat.enums.InfoEnum;
-import com.hnjca.wechat.pojo.MultiConsume;
-import com.hnjca.wechat.pojo.MultiDeparts;
-import com.hnjca.wechat.pojo.MultiStaff;
-import com.hnjca.wechat.pojo.MultiTerminal;
-import com.hnjca.wechat.service.MultiConsumeService;
-import com.hnjca.wechat.service.MultiDepartsService;
-import com.hnjca.wechat.service.MultiStaffService;
-import com.hnjca.wechat.service.MultiTerminalService;
+import com.hnjca.wechat.pojo.*;
+import com.hnjca.wechat.service.*;
 import com.hnjca.wechat.util.DateUtil;
 import com.hnjca.wechat.util.Utils;
 import com.hnjca.wechat.vo.ResponseInfo;
@@ -42,6 +36,9 @@ public class DataSyncController {
 
     @Autowired
     private MultiConsumeService multiConsumeService;
+
+    @Autowired
+    private MultiRechargeService multiRechargeService;
 
     /**
      * 获取员工的总数
@@ -268,6 +265,38 @@ public class DataSyncController {
         multiConsume.setCreateIp(Utils.getIp(req));
 
         int result = this.multiConsumeService.insertMultiConsume(multiConsume);
+
+        return new ResponseInfo(InfoEnum.SUCCESS,result);
+    }
+
+    /**
+     * 添加充值记录
+     * @param eCode
+     * @return
+     */
+    @PostMapping(value = "addCharge")
+    public ResponseInfo addCharge(String eCode, String empId , String cardId, String chargeMoney, String cardBalance,
+                                   String opYmd, String cardTimes, String cardSequ, String Kind, String opUser,
+                                  String opDate, String remark, String difineSequ ){
+        if(eCode == null || eCode.equals("")){
+            return new ResponseInfo(InfoEnum.NO_ECODE,-1);
+        }
+        MultiRecharge multiRecharge = new MultiRecharge();
+        multiRecharge.setECode(eCode);
+        multiRecharge.setEmpId(empId);
+        multiRecharge.setCardId(cardId);
+        multiRecharge.setChargeMoney(chargeMoney);
+        multiRecharge.setCardBalance(cardBalance);
+        multiRecharge.setOpYmd(DateUtil.strToDate(opYmd,null));
+        multiRecharge.setCardTimes(cardTimes);
+        multiRecharge.setCardSequ(cardSequ);
+        multiRecharge.setKind(Kind);
+        multiRecharge.setOpUser(opUser);
+        multiRecharge.setOpDate(DateUtil.strToDate(opDate,null));
+        multiRecharge.setRemark(remark);
+        multiRecharge.setDifineSequ(difineSequ);
+
+        int result = multiRechargeService.insertMultiRecharge(multiRecharge);
 
         return new ResponseInfo(InfoEnum.SUCCESS,result);
     }

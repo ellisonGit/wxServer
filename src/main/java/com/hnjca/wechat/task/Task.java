@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Task {
 
-    @Scheduled(cron="0 1 * * * ?")   //每一小时的第一分钟执行一次
+    //@Scheduled(cron="0 1 * * * ?")   //每一小时的第一分钟执行一次
     public void getAccessTokenProduction() {
         String token = WxServerUtil.getAccessToken(WechatAccount.HNJCA.getAppId(), WechatAccount.HNJCA.getSecret());
         AccessTokenUtil.accessToken.setAccess_token(token);
