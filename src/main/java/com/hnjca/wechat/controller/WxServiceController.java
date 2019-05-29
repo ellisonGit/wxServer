@@ -4,9 +4,11 @@ import com.hnjca.wechat.enums.InfoEnum;
 import com.hnjca.wechat.pojo.MultiConsume;
 import com.hnjca.wechat.pojo.MultiRecharge;
 import com.hnjca.wechat.pojo.MultiStaff;
+import com.hnjca.wechat.pojo.WxMultiRecharge;
 import com.hnjca.wechat.service.MultiConsumeService;
 import com.hnjca.wechat.service.MultiRechargeService;
 import com.hnjca.wechat.service.MultiStaffService;
+import com.hnjca.wechat.service.WxMultiRechargeService;
 import com.hnjca.wechat.util.DateUtil;
 import com.hnjca.wechat.vo.ResponseInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,9 @@ public class WxServiceController {
 
     @Autowired
     private MultiRechargeService multiRechargeService;
+
+    @Autowired
+    private WxMultiRechargeService wxMultiRechargeService;
     /**
      * 员工绑定微信公众号
      *
@@ -276,6 +281,48 @@ public class WxServiceController {
 
         return new ResponseInfo(InfoEnum.NET_ERROR, -1);
 
+    }
+
+
+    /**
+     * 微信充值记录保存
+     * @param wxMultiRecharge
+     * @return
+     */
+    @GetMapping(value = "/saveWxInfo")
+    public ResponseInfo saveWx(WxMultiRecharge wxMultiRecharge) {
+        String  openId=wxMultiRecharge.getOpenId();
+        if (openId == null || "".equals(openId)) {
+            return new ResponseInfo(InfoEnum.NO_OPENID, -1);
+        }
+
+            MultiStaff  result= multiStaffService.selectUserInfo(openId);//查询该员工是否存员工信息
+            if (result !=null) {
+
+
+                String eCode=result.getECode();//企业编号
+                String jobNo=result.getJobNo();//工号
+                String uid=wxMultiRecharge.getUid();//交易单号
+                WxMultiRecharge wx =new WxMultiRecharge();
+                wx.setUid(wxMultiRecharge.getUid());
+                wx.setOpenId(wxMultiRecharge.getOpenId());
+                wx.setOutTradeNo(wxMultiRecharge.getOutTradeNo());
+                wx.setMoney(wxMultiRecharge.getMoney());
+                wx.setState("0");
+                wx.setCreateTime(wxMultiRecharge.getCreateTime());
+                wx.setECode(eCode);
+                wx.setJobNo(jobNo);
+                WxMultiRecharge  isCZ=wxMultiRechargeService.selectOne(openId,eCode,uid);
+                if(isCZ==null){
+                    int ret=wxMultiRechargeService.insertWxMultiRecharge(wx);
+                    if(ret>0){
+                        return new ResponseInfo(InfoEnum.SUCCESS, ret);
+                    }
+                }
+
+
+            }
+        return new ResponseInfo(InfoEnum.SHUJU, -1);
     }
 
 }

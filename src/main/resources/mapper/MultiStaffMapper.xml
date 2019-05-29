@@ -43,7 +43,7 @@
 
     <!--根据openId查员工基本信息 -->
     <select id="selectUserInfo" resultType="com.hnjca.wechat.pojo.MultiStaff"  parameterType="String">
-      select s_name,job_no from multi_staff where  openid = #{openId,jdbcType=VARCHAR}
+      select s_name,job_no,e_code from multi_staff where  openid = #{openId,jdbcType=VARCHAR}
     </select>
 
     <!--根据工号和姓名 绑定openid -->

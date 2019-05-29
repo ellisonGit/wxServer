@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hnjca.wechat.dao.WxMultiRechargeDao">
+
+    <insert id="insertWxMultiRecharge" parameterType="com.hnjca.wechat.pojo.WxMultiRecharge">
+        insert into wx_multi_recharge
+        (u_id,money,remain_money,state,create_time,open_id,pose_sequ,card_sequ,e_code,job_no,card_no,out_trade_no )
+         values (
+            #{uid,jdbcType=VARCHAR},#{money,jdbcType=VARCHAR},#{remainMoney,jdbcType=VARCHAR},
+            #{state,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{openId,jdbcType=VARCHAR},
+            #{poseSequ,jdbcType=VARCHAR},#{cardSequ,jdbcType=VARCHAR},#{eCode,jdbcType=VARCHAR},#{jobNo,jdbcType=VARCHAR},
+            #{cardNo,jdbcType=VARCHAR},#{outTradeNo,jdbcType=VARCHAR}
+        )
+    </insert>
+
+   <select id="selectOne" parameterType="String" resultType="com.hnjca.wechat.pojo.WxMultiRecharge">
+        select * from  wx_multi_recharge where  open_id = #{0} and e_code = #{1} and u_id=#{2}
+    </select>
+
+    <!--   &lt;!&ndash; 充值记录&ndash;&gt;
+      <select id="selectCList" resultType="com.hnjca.wechat.pojo.MultiRecharge" parameterType="map">
+   SELECT
+      r.charge_money AS chargeMoney,
+      TO_CHAR (
+          r.OP_DATE,
+          'yyyy-MM-dd HH24:mi:ss'
+      ) AS opDate
+  FROM
+      MULTI_RECHARGE r
+  LEFT JOIN MULTI_STAFF s ON s.job_no = r.emp_id
+  WHERE
+      r.emp_id= #{0,jdbcType=VARCHAR}
+  AND s.openid = #{1,jdbcType=VARCHAR}
+  and to_char(r.OP_DATE,'yyyy-MM-dd hh24:mi:ss') LIKE '%'||#{2}||'%'  ORDER BY opDate DESC
+      </select>-->
+</mapper>
