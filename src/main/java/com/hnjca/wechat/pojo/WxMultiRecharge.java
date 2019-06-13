@@ -1,6 +1,7 @@
 package com.hnjca.wechat.pojo;
 
 import lombok.Data;
+import org.springframework.data.annotation.Transient;
 
 import java.util.Date;
 
@@ -14,6 +15,9 @@ import java.util.Date;
 @Data
 public class WxMultiRecharge {
 
+    private String pageSize;
+
+    private String pageNumber;
     private String uid ;
     private String money ;
 
@@ -40,8 +44,7 @@ public class WxMultiRecharge {
     //附加
     private  String body;
 
-
-
+    private  String empId;
 
 
 

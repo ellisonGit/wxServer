@@ -10,6 +10,7 @@ import com.hnjca.wechat.service.MultiTerminalService;
 import com.hnjca.wechat.util.DateUtil;
 import com.hnjca.wechat.util.TemplateMsgUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +20,12 @@ import java.util.Map;
 
 /**
  * Description:
- * User: YangYong
- * Date: 2019-04-27
+ * User: Ellison
+ * Date: 2019-05-27
  * Time: 11:50
  * Modified:
  */
+//@Cacheable(value = "usercache")
 @Service
 public class MultiConsumeServiceImpl implements MultiConsumeService {
 

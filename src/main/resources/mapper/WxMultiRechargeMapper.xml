@@ -9,7 +9,7 @@
          values (
             #{uid,jdbcType=VARCHAR},#{money,jdbcType=VARCHAR},#{remainMoney,jdbcType=VARCHAR},
             #{state,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{openId,jdbcType=VARCHAR},
-            #{poseSequ,jdbcType=VARCHAR},#{cardSequ,jdbcType=VARCHAR},#{eCode,jdbcType=VARCHAR},#{jobNo,jdbcType=VARCHAR},
+            s_test.nextval,#{cardSequ,jdbcType=VARCHAR},#{eCode,jdbcType=VARCHAR},#{jobNo,jdbcType=VARCHAR},
             #{cardNo,jdbcType=VARCHAR},#{outTradeNo,jdbcType=VARCHAR}
         )
     </insert>
@@ -17,21 +17,32 @@
    <select id="selectOne" parameterType="String" resultType="com.hnjca.wechat.pojo.WxMultiRecharge">
         select * from  wx_multi_recharge where  open_id = #{0} and e_code = #{1} and u_id=#{2}
     </select>
+    <!--根据state状态查询是否有未同步的数据（0：未同步，1：已同步） -->
+    <select id="selectIf" parameterType="String" resultType="com.hnjca.wechat.pojo.WxMultiRecharge">
+        select money,job_no,out_trade_no,e_code from  wx_multi_recharge where  state =0   and e_code  = #{eCode}
+    </select>
 
-    <!--   &lt;!&ndash; 充值记录&ndash;&gt;
-      <select id="selectCList" resultType="com.hnjca.wechat.pojo.MultiRecharge" parameterType="map">
-   SELECT
-      r.charge_money AS chargeMoney,
-      TO_CHAR (
-          r.OP_DATE,
-          'yyyy-MM-dd HH24:mi:ss'
-      ) AS opDate
-  FROM
-      MULTI_RECHARGE r
-  LEFT JOIN MULTI_STAFF s ON s.job_no = r.emp_id
-  WHERE
-      r.emp_id= #{0,jdbcType=VARCHAR}
-  AND s.openid = #{1,jdbcType=VARCHAR}
-  and to_char(r.OP_DATE,'yyyy-MM-dd hh24:mi:ss') LIKE '%'||#{2}||'%'  ORDER BY opDate DESC
-      </select>-->
+    <!--测试分页-->
+    <select id="selectFy" parameterType="String" resultType="com.hnjca.wechat.pojo.WxMultiRecharge">
+        select money,job_no,out_trade_no,e_code from  wx_multi_recharge where  state =1
+    </select>
+    <!--根据工号和企业编码更新已同步状态state:1 -->
+    <update id="updateState"  parameterType="com.hnjca.wechat.pojo.WxMultiRecharge" >
+
+        update wx_multi_recharge
+        <set >
+            state ='1'
+
+        </set>
+        where 1=1
+        <if test="jobNo != null and jobNo != ''">
+            and job_no  = #{jobNo}
+        </if>
+        <if test="eCode != null and eCode != ''">
+            and e_code  = #{eCode}
+        </if>
+        <if test="outTradeNo != null and outTradeNo != ''">
+            and out_trade_no  = #{outTradeNo}
+        </if>
+    </update>
 </mapper>

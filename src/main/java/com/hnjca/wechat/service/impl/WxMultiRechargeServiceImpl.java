@@ -1,24 +1,18 @@
 package com.hnjca.wechat.service.impl;
 
-import com.hnjca.wechat.dao.MultiRechargeDao;
+
+import com.github.pagehelper.PageInfo;
 import com.hnjca.wechat.dao.MultiStaffDao;
 import com.hnjca.wechat.dao.WxMultiRechargeDao;
-import com.hnjca.wechat.pojo.MultiRecharge;
-import com.hnjca.wechat.pojo.MultiStaff;
-import com.hnjca.wechat.pojo.TemplateJson;
 import com.hnjca.wechat.pojo.WxMultiRecharge;
-import com.hnjca.wechat.service.MultiRechargeService;
-import com.hnjca.wechat.service.MultiTerminalService;
 import com.hnjca.wechat.service.WxMultiRechargeService;
-import com.hnjca.wechat.util.DateUtil;
-import com.hnjca.wechat.util.TemplateMsgUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 /**
  * Description:
@@ -46,9 +40,26 @@ public class WxMultiRechargeServiceImpl implements WxMultiRechargeService {
     @Override
     public WxMultiRecharge selectOne( String openId,String eCode,String uid) {
         return  wxMultiRechargeDao.selectOne(openId,eCode,uid);
-
-
-
     }
 
+    @Transactional
+    @Override
+    public List<WxMultiRecharge> selectIf( String eCode) {
+        return  wxMultiRechargeDao.selectIf(eCode);
+    }
+
+    @Transactional
+    @Override
+    public int updateState( WxMultiRecharge wxMultiRecharge) {
+        return  wxMultiRechargeDao.updateState(wxMultiRecharge);
+    }
+
+
+
+   @Override
+    public PageInfo<WxMultiRecharge> selectFy(WxMultiRecharge wxMultiRecharge) {
+       List<WxMultiRecharge> rows = wxMultiRechargeDao.selectFy(wxMultiRecharge);
+       PageInfo<WxMultiRecharge> pageInfo = new PageInfo<WxMultiRecharge>(rows);
+       return pageInfo;
+    }
 }

@@ -2,6 +2,8 @@ package com.hnjca.wechat.dao;
 
 import com.hnjca.wechat.pojo.WxMultiRecharge;
 
+import java.util.List;
+
 
 /**
  * Description:
@@ -14,4 +16,9 @@ public interface WxMultiRechargeDao {
 
     int insertWxMultiRecharge(WxMultiRecharge wxMultiRecharge);
     WxMultiRecharge selectOne(String openId,String eCode,String uid);
+    List<WxMultiRecharge> selectIf(String eCode);
+    int updateState(WxMultiRecharge wxMultiRecharge);
+
+    List<WxMultiRecharge> selectFy(WxMultiRecharge wxMultiRecharge);
+
 }

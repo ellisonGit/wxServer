@@ -21,7 +21,7 @@ public class TemplateMsgUtil {
      */
     public static boolean sendTemplateMsg(TemplateJson templateJson){
 
-        String token = AccessTokenUtil.accessToken.getAccess_token();
+        String token ="";// AccessTokenUtil.accessToken.getAccess_token()
         if(token == null || "".equals(token)){
             token = WxServerUtil.getAccessToken(WechatAccount.HNJCA.getAppId(),WechatAccount.HNJCA.getSecret());
             AccessTokenUtil.accessToken.setAccess_token(token);

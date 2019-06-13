@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hnjca.wechat.dao.WxcpMultiStaffDao">
+
+    <select id="countByEcode" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(*) from multi_staff where e_code = #{eCode,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertMultiStaff" parameterType="com.hnjca.wechat.pojo.WxcpMultiStaff">
+        <selectKey keyProperty="sid" order="BEFORE" keyColumn="s_id" resultType="Integer">
+            select SEQ_MULTI.nextval FROM DUAL
+        </selectKey>
+        insert into wxcp_multi_staff
+          (s_id,s_name,e_code,departs_id,job_no,card_no,create_time,last_time)
+        values
+          (#{sid},#{sName,jdbcType=VARCHAR},#{eCode,jdbcType=VARCHAR},#{departsId,jdbcType=VARCHAR},#{jobNo,jdbcType=VARCHAR},
+          #{cardNo,jdbcType=VARCHAR},sysdate,sysdate)
+    </insert>
+
+    <select id="selectByCondition" resultType="com.hnjca.wechat.pojo.WxcpMultiStaff" parameterType="java.util.Map">
+      select * from wxcp_multi_staff where e_code = #{eCode,jdbcType=VARCHAR} and job_no = #{jobNo,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据工号和姓名查是否绑定微信公众号 参数openid -->
+    <select id="selectOpenid" resultType="java.lang.Integer" parameterType="java.util.Map">
+      select count(user_id) from wxcp_multi_staff where s_name = #{sName,jdbcType=VARCHAR} and job_no = #{jobNo,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据工号和姓名查是否存在该员工信息 -->
+    <select id="selectUser" resultType="java.lang.Integer" parameterType="java.util.Map">
+      select job_no from wxcp_multi_staff where s_name = #{sName,jdbcType=VARCHAR} and job_no = #{jobNo,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据openId查是否存在 -->
+    <select id="findOpenId" resultType="java.lang.String" parameterType="String">
+      select user_id from wxcp_multi_staff where  user_id = #{openId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据openId查员工基本信息 -->
+    <select id="selectUserInfo" resultType="com.hnjca.wechat.pojo.WxcpMultiStaff"  parameterType="String">
+      select s_name,job_no,e_code from wxcp_multi_staff where  user_id = #{openId,jdbcType=VARCHAR}
+    </select>
+
+    <!--根据工号和姓名 绑定openid -->
+    <update id="updateOpenid"  parameterType="com.hnjca.wechat.dao.MultiStaffDao" >
+        update wxcp_multi_staff
+        <set >
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+
+        </set>
+        where 1=1
+        <if test="jobNo != null and jobNo != ''">
+            and job_no  = #{jobNo}
+        </if>
+    </update>
+</mapper>

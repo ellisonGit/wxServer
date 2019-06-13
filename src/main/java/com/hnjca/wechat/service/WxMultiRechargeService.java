@@ -1,5 +1,6 @@
 package com.hnjca.wechat.service;
 
+import com.github.pagehelper.PageInfo;
 import com.hnjca.wechat.pojo.MultiRecharge;
 import com.hnjca.wechat.pojo.WxMultiRecharge;
 
@@ -18,4 +19,8 @@ public interface WxMultiRechargeService {
 
   int insertWxMultiRecharge(WxMultiRecharge wxMultiRecharge);
   WxMultiRecharge selectOne(String openId,String eCode,String uid);
+  List<WxMultiRecharge> selectIf(String eCode);
+  int updateState(WxMultiRecharge wxMultiRecharge);
+  //test 分页
+  PageInfo<WxMultiRecharge> selectFy(WxMultiRecharge wxMultiRecharge);
 }

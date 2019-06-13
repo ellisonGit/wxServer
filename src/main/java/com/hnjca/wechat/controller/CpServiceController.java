@@ -1,5 +1,6 @@
 package com.hnjca.wechat.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.hnjca.wechat.enums.InfoEnum;
 import com.hnjca.wechat.pojo.*;
 import com.hnjca.wechat.service.*;
@@ -10,9 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import com.github.pagehelper.PageInfo;
 
-import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,15 +21,18 @@ import java.util.List;
 /**
  * Description:
  * User: Ellison
- * Date: 2019-05-15
+ * Date: 2019-05-11
  * Time: 9:11
  * Modified:
  */
 @RestController
-@RequestMapping(value = "/wx",produces = "application/json;charset=utf-8",method = RequestMethod.POST)
-public class WxServiceController {
+@RequestMapping(value = "/cp",produces = "application/json;charset=utf-8",method = RequestMethod.POST)
+public class CpServiceController {
     @Autowired
     private MultiStaffService multiStaffService;
+
+    @Autowired
+    private WxcpMultiStaffService wxcpMultiStaffService;
 
     @Autowired
     private MultiConsumeService multiConsumeService;
@@ -44,9 +46,9 @@ public class WxServiceController {
     @Autowired
     private WxCpTokenService wxCpTokenService;
     /**
-     * 员工绑定微信公众号
+     * 员工绑定微信企业号
      *
-     * @param openid
+     * @param openid//就是userid
      * @param stuno
      * @param stuname
      * @return
@@ -70,17 +72,17 @@ public class WxServiceController {
         if (stuname == null || ("").equals(stuname)) {
             return new ResponseInfo(InfoEnum.NO_STUNAME_lowercase, -1);
         }
-        MultiStaff multiStaff = new MultiStaff();
+         WxcpMultiStaff  multiStaff= new WxcpMultiStaff();
         multiStaff.setJobNo(stuno);
         multiStaff.setSName(stuname);
         multiStaff.setOpenId(openid);
-        int user = multiStaffService.selectUser(multiStaff);//查询该员工是否存员工信息
+        int user = wxcpMultiStaffService.selectUser(multiStaff);//查询该员工是否存员工信息
         if (user > 0) {
-            int result = multiStaffService.selectOpenid(multiStaff);//查询该员工是否存在openid
+            int result = wxcpMultiStaffService.selectOpenid(multiStaff);//查询该员工是否存在openid
             if (result > 0) {
                 return new ResponseInfo(InfoEnum.OPENID_SUCCESS, result);
             } else {
-                int open = multiStaffService.updateOpenid( multiStaff);//绑定openid
+                int open = wxcpMultiStaffService.updateOpenid( multiStaff);//绑定openid
                 if (open > 0) {
                     return new ResponseInfo(InfoEnum.WXSUCCESS, result);
                 }
@@ -102,15 +104,11 @@ public class WxServiceController {
 
     @GetMapping(value = "/verificationBanding")
     public ResponseInfo banding(String openId) {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-        System.out.println("開始時間"+df.format(new Date()));// new Date()为获取当前系统时间
         if (openId == null || "".equals(openId)) {
             return new ResponseInfo(InfoEnum.NO_OPENID, -1);
         }
-        String  result= multiStaffService.findOpenId(openId);//查询该员工是否存员工信息
+        String  result= wxcpMultiStaffService.findOpenId(openId);//查询该员工是否存员工信息
         if (result !=null) {
-            SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-            System.out.println("结束時間"+df2.format(new Date()));// new Date()为获取当前系统时间
             return new ResponseInfo(InfoEnum.OPENID_SUCCESS, 1);
             }
                 return new ResponseInfo(InfoEnum.NO_OPEN, -1);
@@ -128,8 +126,7 @@ public class WxServiceController {
         if (openId == null || "".equals(openId)) {
             return new ResponseInfo(InfoEnum.NO_OPENID, -1);
         }
-        MultiStaff multiStaff = multiStaffService.selectUserInfo(openId);
-        //System.out.println("！");
+        WxcpMultiStaff multiStaff = wxcpMultiStaffService.selectUserInfo(openId);
         return new ResponseInfo(InfoEnum.SUCCESS, multiStaff);
 
     }
@@ -181,7 +178,7 @@ public class WxServiceController {
      * 余额
      * @param openId
      * @return
-     */
+     *//*
     @GetMapping(value = "/getYuE")
     public ResponseInfo yuE(String openId) {
 
@@ -199,7 +196,7 @@ public class WxServiceController {
         }
         return new ResponseInfo(InfoEnum.NET_ERROR, -1);
 
-    }
+    }*/
 
     /**
      * 支出，充值
@@ -289,7 +286,7 @@ public class WxServiceController {
      * @param wxMultiRecharge
      * @return
      */
-    @GetMapping(value = "/saveWxInfo")
+  /*  @GetMapping(value = "/saveWxInfo")
     public ResponseInfo saveWx(WxMultiRecharge wxMultiRecharge) throws ParseException {
         String  openId=wxMultiRecharge.getOpenId();
         if (openId == null || "".equals(openId)) {
@@ -326,17 +323,17 @@ public class WxServiceController {
 
 
 
-    /**
+    *//**
      * 查询微信充值记是否已同步到本地数据库
      * @param eCode
      * @return
-     */
+     *//*
     @GetMapping(value = "/seletIf")
     public ResponseInfo seletIf(String eCode) throws ParseException {
 
         List<WxMultiRecharge>  result= wxMultiRechargeService.selectIf(eCode);
         if (result.size()>0) {
-          /*  for(WxMultiRecharge str : result){
+          *//*  for(WxMultiRecharge str : result){
                 WxMultiRecharge wx=new WxMultiRecharge();
                 wx.setJobNo(str.getJobNo());
                 wx.setECode(eCode);
@@ -345,17 +342,17 @@ public class WxServiceController {
                 if (res>0) {
                     return new ResponseInfo(InfoEnum.SUCCESS, res);
                 }
-            }*/
+            }*//*
                     return new ResponseInfo(InfoEnum.SUCCESS, result);
                 }
         return new ResponseInfo(InfoEnum.NO_SHUJU, result);
     }
 
-    /**
+    *//**
      * 更新微信充值记同步数据的状态state:1
      * @param eCode
      * @return
-     */
+     *//*
     @GetMapping(value = "/updateState")
     public ResponseInfo updateState(String eCode,String jobNo,String outTradeNo) throws ParseException {
         WxMultiRecharge wx=new WxMultiRecharge();
@@ -371,11 +368,11 @@ public class WxServiceController {
 
 
 
-    /**
+    *//**
      * 查询fenye
      * @param
      * @return
-     */
+     *//*
     @GetMapping(value = "/seletFy")
     public PageInfo<WxMultiRecharge> seletFy(WxMultiRecharge wxMultiRecharge) throws ParseException {
 
@@ -383,11 +380,11 @@ public class WxServiceController {
 
     }
 
-    /**
+    *//**
      * 查询token
      * @param
      * @return
-     */
+     *//*
     @GetMapping(value = "/selectToken")
     public ResponseInfo selectToken(String id){
 
@@ -395,17 +392,17 @@ public class WxServiceController {
         return new ResponseInfo(InfoEnum.SUCCESS,result);
     }
 
-    /**
+    *//**
      * 更新token
      * @param
      * @return
-     */
+     *//*
     @GetMapping(value = "/updateToken")
     public int updateToken(String accessToken){
        Date tokenTime=new Date();// new Date()为获取当前系统时间
         return wxCpTokenService.updateToken(accessToken,tokenTime);
 
     }
-
+*/
 
 }

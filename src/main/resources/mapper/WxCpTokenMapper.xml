@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hnjca.wechat.dao.WxCpTokenDao">
+
+
+
+   <select id="selectOne" resultType="com.hnjca.wechat.pojo.WxCpToken">
+       select ACCESS_TOKEN as accessToken,token_time as tokenTime from WX_CP_TOKEN
+    </select>
+
+    <!--更新token -->
+    <update id="updateToken"  parameterType="com.hnjca.wechat.pojo.WxCpToken" >
+
+        update WX_CP_TOKEN
+        <set >
+            ACCESS_TOKEN = #{0},
+            token_time= #{1}
+        </set>
+    </update>
+</mapper>

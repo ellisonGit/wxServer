@@ -16,6 +16,25 @@
         	开启数据库字段和pojo字段基于约定的自动映射
         	进行自动映射时，数据以下划线命名，如数据库返回的"order_address"命名字段是否映射为class的"orderAddress"字段。默认为false 
         -->
-        <setting name="mapUnderscoreToCamelCase" value="true" /> 
+        <setting name="mapUnderscoreToCamelCase" value="true" />
+
+
     </settings>
+
+
+    <plugins>
+        <!-- PageHelper4.1.1 -->
+        <plugin interceptor="com.github.pagehelper.PageHelper">
+            <property name="dialect" value="oracle"/>
+            <property name="offsetAsPageNum" value="false"/>
+            <property name="rowBoundsWithCount" value="false"/>
+            <property name="pageSizeZero" value="true"/>
+            <property name="reasonable" value="false"/>
+            <property name="supportMethodsArguments" value="false"/>
+            <property name="returnPageInfo" value="none"/>
+        </plugin>
+    </plugins>
+
+
+
 </configuration>
